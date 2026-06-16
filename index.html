@@ -8,6 +8,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#08080a;color:#fff;overflow-x:hidden;-webkit-tap-highlight-color:transparent;min-height:100vh;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+.no-scroll{overflow:hidden;height:100vh;position:fixed;width:100%}
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-track{background:#08080a}
 ::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
@@ -283,7 +284,7 @@ header.scrolled{background:rgba(8,8,10,.98)}
 
 <script>
 const PROXY = window.Capacitor ? null : 'https://kuro-proxy.kiritopolaco12.workers.dev';
-let db, allItems = [], heroIndex = 0, heroTimer;
+let db, allItems = [], heroIndex = 0, heroTimer, _savedScrollY = 0;
 
 async function init(){
   try{
@@ -308,6 +309,9 @@ function buildNav(){
 }
 
 function openCatalog(el, origin){
+  _savedScrollY = window.scrollY;
+  window.scrollTo(0, 0);
+  document.body.classList.add('no-scroll');
   document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('home').style.display = 'none';
@@ -331,6 +335,8 @@ function closeCatalog(){
   document.getElementById('catalog').style.display = 'none';
   document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
   document.querySelector('.nav a:first-child')?.classList.add('active');
+  document.body.classList.remove('no-scroll');
+  window.scrollTo(0, _savedScrollY);
 }
 
 function buildHero(series){
@@ -398,6 +404,9 @@ let _curItem, _curEpisodes, _curSeason, _curEpIdx, _gridSeason;
 
 function openItem(item){
   if(!item) return;
+  _savedScrollY = window.scrollY;
+  window.scrollTo(0, 0);
+  document.body.classList.add('no-scroll');
   _curItem = item;
   history.pushState({page:'detail',key:item.key}, '', '#/'+item.key);
   document.getElementById('home').style.display = 'none';
@@ -705,9 +714,13 @@ function closeDetail(){
   history.pushState(null, '', '#');
   document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
   document.querySelector('.nav a:first-child')?.classList.add('active');
+  document.body.classList.remove('no-scroll');
+  window.scrollTo(0, _savedScrollY);
 }
 
 function goHome(){
+  document.body.classList.remove('no-scroll');
+  window.scrollTo(0, _savedScrollY);
   if(document.getElementById('dpage').style.display==='block') closeDetail();
   closeCatalog();
 }
@@ -716,6 +729,7 @@ function toggleSearch(){
   const s = document.getElementById('search');
   const show = s.style.display !== 'block';
   s.style.display = show ? 'block' : 'none';
+  document.body.classList.toggle('no-scroll', show);
   if(show) document.getElementById('searchInput').focus();
   else {document.getElementById('searchInput').value='';document.getElementById('searchResults').innerHTML='';}
 }
