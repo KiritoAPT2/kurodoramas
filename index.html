@@ -331,7 +331,6 @@ function buildNav(){
 function openCatalog(el, origin){
   _savedScrollY = window.scrollY;
   window.scrollTo(0, 0);
-  document.body.classList.add('no-scroll');
   document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
   document.querySelectorAll('#drawer a').forEach(a=>a.classList.remove('active'));
   el.classList.add('active');
@@ -360,7 +359,6 @@ function closeCatalog(){
   document.querySelector('.nav a:first-child')?.classList.add('active');
   document.querySelectorAll('#drawer a').forEach(a=>a.classList.remove('active'));
   document.querySelector('#drawer a:first-child')?.classList.add('active');
-  document.body.classList.remove('no-scroll');
   window.scrollTo(0, _savedScrollY);
 }
 
@@ -432,7 +430,6 @@ function openItem(item){
   closeDrawer();
   _savedScrollY = window.scrollY;
   window.scrollTo(0, 0);
-  document.body.classList.add('no-scroll');
   _curItem = item;
   history.pushState({page:'detail',key:item.key}, '', '#/'+item.key);
   document.getElementById('home').style.display = 'none';
@@ -740,13 +737,11 @@ function closeDetail(){
   history.pushState(null, '', '#');
   document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
   document.querySelector('.nav a:first-child')?.classList.add('active');
-  document.body.classList.remove('no-scroll');
   window.scrollTo(0, _savedScrollY);
 }
 
 function goHome(){
   closeDrawer();
-  document.body.classList.remove('no-scroll');
   window.scrollTo(0, _savedScrollY);
   if(document.getElementById('dpage').style.display==='block') closeDetail();
   closeCatalog();
