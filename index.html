@@ -402,6 +402,7 @@ function openItem(item){
   history.pushState({page:'detail',key:item.key}, '', '#/'+item.key);
   document.getElementById('home').style.display = 'none';
   document.getElementById('header').style.display = 'none';
+  document.getElementById('catalog').style.display = 'none';
   const page = document.getElementById('dpage');
   const c = document.getElementById('dpContent');
   page.style.display = 'block';
