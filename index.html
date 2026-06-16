@@ -25,6 +25,16 @@ header.scrolled{background:rgba(8,8,10,.98)}
 .search-btn{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:10px;border-radius:50%;transition:background .3s}
 .search-btn:hover{background:rgba(255,255,255,.1)}
 
+/* Drawer */
+.menu-btn{display:none;background:none;border:none;color:#fff;font-size:26px;cursor:pointer;padding:4px;line-height:1;margin-right:-4px}
+#drawer{position:fixed;top:0;left:-300px;bottom:0;width:280px;z-index:300;background:#0d0d0d;padding:calc(80px + env(safe-area-inset-top,0px)) 0 24px;transition:left .3s ease;overflow-y:auto}
+#drawer.open{left:0}
+#drawer .dr-hdr{padding:0 24px;margin-bottom:16px;font-size:11px;color:#555;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+#drawer a{display:block;padding:14px 24px;font-size:15px;color:#ccc;text-decoration:none;border-left:3px solid transparent;transition:all .2s}
+#drawer a:hover,#drawer a.active{background:rgba(124,58,237,.1);border-left-color:#7c3aed;color:#fff}
+#drawerOverlay{position:fixed;inset:0;z-index:299;background:rgba(0,0,0,.6);display:none}
+#drawerOverlay.show{display:block}
+
 /* Hero carousel (home) */
 #home{position:relative}
 .hero{position:relative;height:80vh;min-height:450px;display:flex;align-items:flex-end;padding:0 calc(24px + env(safe-area-inset-right,0px)) 60px calc(24px + env(safe-area-inset-left,0px))}
@@ -216,7 +226,8 @@ header.scrolled{background:rgba(8,8,10,.98)}
   header{padding:14px calc(20px + env(safe-area-inset-right,0px)) 14px calc(20px + env(safe-area-inset-left,0px));gap:12px}
   .hero{height:55vh;min-height:300px;padding:0 calc(16px + env(safe-area-inset-right,0px)) 40px calc(16px + env(safe-area-inset-left,0px))}
   .hero-nav{bottom:40px;right:calc(16px + env(safe-area-inset-right,0px))}
-  .nav a{font-size:11px;padding:4px 10px}
+  .nav{display:none}
+  .menu-btn{display:block}
   .card-w{width:200px}
   .card-t{width:140px}
   .sh{padding:0 calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px))}
@@ -254,9 +265,13 @@ header.scrolled{background:rgba(8,8,10,.98)}
 
 <header id="header">
   <a class="logo" href="#" onclick="goHome();return false">Kuro<span>Doramas</span></a>
+  <button class="menu-btn" onclick="toggleDrawer()">☰</button>
   <div class="nav" id="nav"></div>
   <button class="search-btn" onclick="toggleSearch()">⌕</button>
 </header>
+
+<div id="drawerOverlay" onclick="closeDrawer()"></div>
+<div id="drawer"></div>
 
 <div id="home">
   <div class="hero" id="hero"></div>
@@ -303,9 +318,14 @@ async function init(){
 
 function buildNav(){
   const nav = document.getElementById('nav');
+  const drawer = document.getElementById('drawer');
   const origins = [...new Set(allItems.map(i=>i.origin).filter(Boolean))];
-  nav.innerHTML = '<a class="active" onclick="return openCatalog(this,\'all\')">Todos</a>' +
+  const links = '<a class="active" onclick="return openCatalog(this,\'all\')">Todos</a>' +
     origins.map(o => `<a onclick="return openCatalog(this,'${o}')">${o}</a>`).join('');
+  nav.innerHTML = links;
+  drawer.innerHTML = '<div class="dr-hdr">Categorías</div>' +
+    '<a class="active" onclick="closeDrawer();return openCatalog(this,\'all\')">Todos</a>' +
+    origins.map(o => `<a onclick="closeDrawer();return openCatalog(this,'${o}')">${o}</a>`).join('');
 }
 
 function openCatalog(el, origin){
@@ -313,7 +333,10 @@ function openCatalog(el, origin){
   window.scrollTo(0, 0);
   document.body.classList.add('no-scroll');
   document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
+  document.querySelectorAll('#drawer a').forEach(a=>a.classList.remove('active'));
   el.classList.add('active');
+  const originLabel = origin === 'all' ? 'Todos' : origin;
+  document.querySelectorAll('#drawer a').forEach(a => { if (a.textContent.trim() === originLabel) a.classList.add('active') });
   document.getElementById('home').style.display = 'none';
   document.getElementById('catalog').style.display = 'block';
   document.getElementById('dpage').style.display = 'none';
@@ -335,6 +358,8 @@ function closeCatalog(){
   document.getElementById('catalog').style.display = 'none';
   document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
   document.querySelector('.nav a:first-child')?.classList.add('active');
+  document.querySelectorAll('#drawer a').forEach(a=>a.classList.remove('active'));
+  document.querySelector('#drawer a:first-child')?.classList.add('active');
   document.body.classList.remove('no-scroll');
   window.scrollTo(0, _savedScrollY);
 }
@@ -404,6 +429,7 @@ let _curItem, _curEpisodes, _curSeason, _curEpIdx, _gridSeason;
 
 function openItem(item){
   if(!item) return;
+  closeDrawer();
   _savedScrollY = window.scrollY;
   window.scrollTo(0, 0);
   document.body.classList.add('no-scroll');
@@ -719,10 +745,26 @@ function closeDetail(){
 }
 
 function goHome(){
+  closeDrawer();
   document.body.classList.remove('no-scroll');
   window.scrollTo(0, _savedScrollY);
   if(document.getElementById('dpage').style.display==='block') closeDetail();
   closeCatalog();
+}
+
+function toggleDrawer(){
+  const d = document.getElementById('drawer');
+  const o = document.getElementById('drawerOverlay');
+  const open = !d.classList.contains('open');
+  d.classList.toggle('open', open);
+  o.classList.toggle('show', open);
+  document.body.classList.toggle('no-scroll', open);
+}
+
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawerOverlay').classList.remove('show');
+  document.body.classList.remove('no-scroll');
 }
 
 function toggleSearch(){
