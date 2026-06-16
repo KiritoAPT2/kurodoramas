@@ -282,7 +282,7 @@ header.scrolled{background:rgba(8,8,10,.98)}
 </div>
 
 <script>
-const PROXY = window.Capacitor ? null : 'https://kuro-proxy.kiritopolaco12.workers.dev/p/';
+const PROXY = window.Capacitor ? null : 'https://kuro-proxy.kiritopolaco12.workers.dev';
 let db, allItems = [], heroIndex = 0, heroTimer;
 
 async function init(){
@@ -663,7 +663,7 @@ function playUrl(url){
     if(window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.KuroPlayer){
       window.Capacitor.Plugins.KuroPlayer.open({url, title:''});
     } else {
-      pf.src = PROXY ? (u=>{const n=new URL(u);return PROXY+btoa(n.origin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')+n.pathname+(n.search||'')})(url) : url;
+      pf.src = PROXY ? (u=>{const n=new URL(u);const ko=btoa(n.origin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');return PROXY+n.pathname+'?__ko='+ko+(n.search?'&'+n.search.slice(1):'')})(url) : url;
     }
   }
 }
