@@ -198,7 +198,7 @@ header.scrolled{background:rgba(8,8,10,.98)}
 /* Comments */
 .dp-cmts{margin-top:24px;padding:0 24px 40px}
 .dp-layout>.dp-cmts{grid-column:1}
-#wpdcom::before{content:'💬 ¿Qué te pareció el capítulo? ¡Deja tu comentario aquí abajo!';display:block;font-size:18px;font-weight:600;color:#fff;background:linear-gradient(90deg,rgba(124,58,237,.2) 70%,transparent 100%);padding:12px 18px;margin-bottom:20px;border-left:4px solid #7c3aed;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,.5);letter-spacing:.5px}
+#wpdcom::before{content:'ðŸ’¬ Â¿QuÃ© te pareciÃ³ el capÃ­tulo? Â¡Deja tu comentario aquÃ­ abajo!';display:block;font-size:18px;font-weight:600;color:#fff;background:linear-gradient(90deg,rgba(124,58,237,.2) 70%,transparent 100%);padding:12px 18px;margin-bottom:20px;border-left:4px solid #7c3aed;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,.5);letter-spacing:.5px}
 .dp-cmts .cmt-box{display:flex;flex-direction:column;gap:8px}
 .dp-cmts .cmt-box textarea{width:100%;padding:12px;border-radius:8px;border:1px solid #1a1a1a;background:#0d0d0d;color:#ccc;font-size:13px;resize:vertical;font-family:inherit;box-sizing:border-box}
 .dp-cmts .cmt-box textarea:focus{border-color:#7c3aed;outline:none}
@@ -254,7 +254,7 @@ header.scrolled{background:rgba(8,8,10,.98)}
 <header id="header">
   <a class="logo" href="#" onclick="goHome();return false">Kuro<span>Doramas</span></a>
   <div class="nav" id="nav"></div>
-  <button class="search-btn" onclick="toggleSearch()">⌕</button>
+  <button class="search-btn" onclick="toggleSearch()">âŒ•</button>
 </header>
 
 <div id="home">
@@ -264,24 +264,25 @@ header.scrolled{background:rgba(8,8,10,.98)}
 
 <div id="catalog">
   <div class="cat-hdr">
-    <button class="cat-back" onclick="closeCatalog()">←</button>
+    <button class="cat-back" onclick="closeCatalog()">â†</button>
     <h1 id="catTitle">Todas las series</h1>
   </div>
   <div class="cat-grid" id="catGrid"></div>
 </div>
 
 <div class="search-overlay" id="search">
-  <button class="search-close" onclick="toggleSearch()">✕</button>
+  <button class="search-close" onclick="toggleSearch()">âœ•</button>
   <input type="text" id="searchInput" placeholder="Buscar..." oninput="doSearch(this.value)">
   <div class="search-results" id="searchResults"></div>
 </div>
 
 <div id="dpage">
-  <button class="dp-back" onclick="closeDetail()">←</button>
+  <button class="dp-back" onclick="closeDetail()">â†</button>
   <div id="dpContent"></div>
 </div>
 
 <script>
+const PROXY = window.Capacitor ? null : 'https://kuro-proxy.kiritopolaco12.workers.dev/?url=';
 let db, allItems = [], heroIndex = 0, heroTimer;
 
 async function init(){
@@ -341,7 +342,7 @@ function buildHero(series){
     <div class="hero-info"><h1 id="heroTitle">${top[0].name}</h1>
     <div class="m"><span style="color:#46d369;font-weight:600">${top[0].origin||'Popular'}</span>${top[0].genres?top[0].genres.slice(0,3).map(g=>`<span class="t">${g}</span>`).join(''):''}</div>
     <p>${top[0].description||''}</p>
-    <div class="hero-btns"><button class="btn-play" onclick="openItem(allItems.find(i=>i.key==='${top[0].key}'))">▶ Reproducir</button>
+    <div class="hero-btns"><button class="btn-play" onclick="openItem(allItems.find(i=>i.key==='${top[0].key}'))">â–¶ Reproducir</button>
     <button class="btn-info" onclick="openItem(allItems.find(i=>i.key==='${top[0].key}'))">Mas info</button></div></div>
     <div class="hero-nav">${dots}</div>`;
   hero._items = top;
@@ -366,7 +367,7 @@ function buildRows(series){
   let html = '';
   const origins = [...new Set(allItems.map(i=>i.origin).filter(Boolean))];
   html += `<div class="s" data-origin="all"><div class="sh"><h2>Todos las series</h2>
-    <div class="sc-arr"><button onclick="scrollRow(this,-1)">‹</button><button onclick="scrollRow(this,1)">›</button></div></div>
+    <div class="sc-arr"><button onclick="scrollRow(this,-1)">â€¹</button><button onclick="scrollRow(this,1)">â€º</button></div></div>
     <div class="row">${series.filter(s=>s.poster).sort((a,b)=>Object.values(b.seasons||{}).reduce((s,v)=>s+v.length,0)-Object.values(a.seasons||{}).reduce((s,v)=>s+v.length,0)).slice(0,30).map((s,i)=>`
       <div class="card card-t" onclick="openItem(allItems.find(x=>x.key==='${s.key}'))">
         <img src="${s.poster}" loading="lazy">
@@ -377,7 +378,7 @@ function buildRows(series){
     const f = series.filter(s=>s.origin===o&&s.poster);
     if(!f.length) continue;
     html += `<div class="s" data-origin="${o}"><div class="sh"><h2>${o}</h2>
-      <div class="sc-arr"><button onclick="scrollRow(this,-1)">‹</button><button onclick="scrollRow(this,1)">›</button></div></div>
+      <div class="sc-arr"><button onclick="scrollRow(this,-1)">â€¹</button><button onclick="scrollRow(this,1)">â€º</button></div></div>
       <div class="row">${f.slice(0,25).map(s=>`
         <div class="card card-t" onclick="openItem(allItems.find(x=>x.key==='${s.key}'))">
           <img src="${s.poster}" loading="lazy">
@@ -439,33 +440,33 @@ function renderDetail(item, ep){
           </div>
         </div>
         <div class="dp-player"><div class="wrap" id="pWrap">
-          <div class="ph" id="pHolder" style="background-image:url(${poster})"><button onclick="playEpisode(${ep.episode||0},${_curSeason})">▶</button></div>
+          <div class="ph" id="pHolder" style="background-image:url(${poster})"><button onclick="playEpisode(${ep.episode||0},${_curSeason})">â–¶</button></div>
           <iframe id="pFrame" allowfullscreen allow="autoplay;fullscreen" referrerpolicy="no-referrer"></iframe>
         </div></div>
         <div class="dp-actions">
-          <button onclick="expandPlayer()">⛶ Expandir reproductor</button>
-          <button onclick="toggleLights()">💡 Apagar luz</button>
+          <button onclick="expandPlayer()">â›¶ Expandir reproductor</button>
+          <button onclick="toggleLights()">ðŸ’¡ Apagar luz</button>
         </div>
       </div>
       <div class="dp-right">
         <div class="dp-sum">
-          <div class="sh">Resumen del episodio <span class="arr">▶</span></div>
-          <div class="bd open"><p>${ep.description||'Sin descripción disponible.'}</p>
-          <button class="more-btn" onclick="toggleSum(this)">Mostrar más</button></div>
+          <div class="sh">Resumen del episodio <span class="arr">â–¶</span></div>
+          <div class="bd open"><p>${ep.description||'Sin descripciÃ³n disponible.'}</p>
+          <button class="more-btn" onclick="toggleSum(this)">Mostrar mÃ¡s</button></div>
         </div>
-        <div class="dp-warn">⚠️ ¿El video no carga? ¡Prueba otro servidor o idioma aquí abajo! 👇</div>
+        <div class="dp-warn">âš ï¸ Â¿El video no carga? Â¡Prueba otro servidor o idioma aquÃ­ abajo! ðŸ‘‡</div>
         <div class="dp-servers"><div class="srvGroups" id="srvGroups"></div></div>
         <div class="dp-nav2">
           ${next?`<div class="nav-card" onclick="navEpisode(1)">
             <img src="${poster}" alt="">
             <div><div class="nav-label">Siguiente episodio</div>
             <div class="nav-title">Episodio ${next.episode}</div>
-            <div class="nav-meta">Episodio ${next.episode} · ${item.origin||''}</div></div>
-            <span class="nav-arrow">→</span>
-          </div>`:`<div class="nav-card" style="opacity:.4;pointer-events:none"><img src="${poster}" alt=""><div><div class="nav-label">Siguiente episodio</div><div class="nav-title">—</div></div></div>`}
+            <div class="nav-meta">Episodio ${next.episode} Â· ${item.origin||''}</div></div>
+            <span class="nav-arrow">â†’</span>
+          </div>`:`<div class="nav-card" style="opacity:.4;pointer-events:none"><img src="${poster}" alt=""><div><div class="nav-label">Siguiente episodio</div><div class="nav-title">â€”</div></div></div>`}
           <div class="nav-links">
-            ${prev?`<a class="prev-link" onclick="navEpisode(-1)">← Episodio anterior</a>`:'<span class="prev-link disabled">← Episodio anterior</span>'}
-            <span class="list-link">📋 Lista de episodios</span>
+            ${prev?`<a class="prev-link" onclick="navEpisode(-1)">â† Episodio anterior</a>`:'<span class="prev-link disabled">â† Episodio anterior</span>'}
+            <span class="list-link">ðŸ“‹ Lista de episodios</span>
           </div>
           <div class="ep-sec">
             <div class="ep-tabs">${seasons.map(([sn, eps]) => `<button class="ep-tab${parseInt(sn)===_curSeason?' act':''}" onclick="switchSeason(${sn})">${sn}</button>`).join('')}</div>
@@ -479,7 +480,7 @@ function renderDetail(item, ep){
           <img src="${poster}" alt="">
           <div><div class="t">Acerca de la serie</div>
           <div class="d trunc" id="sinfoDesc">${item.description||item.name}</div>
-          ${(item.description||'').length>120?'<button class="more-btn" onclick="expandSinfo(this)">Mostrar más</button>':''}</div>
+          ${(item.description||'').length>120?'<button class="more-btn" onclick="expandSinfo(this)">Mostrar mÃ¡s</button>':''}</div>
         </div>
       </div>
       <div class="dp-cmts" id="wpdcom">
@@ -516,7 +517,7 @@ function loadServers(ep){
     if(!groups[key]) groups[key] = [];
     groups[key].push({...s, parsed: p});
   }
-  const langInfo = {'Sub Esp': {flag:'https://upload.wikimedia.org/wikipedia/commons/7/79/Animated-Flag-South-Korea.gif',title:'Servidores Subtitulado'}, 'Esp Lat': {flag:'https://upload.wikimedia.org/wikipedia/commons/5/5c/Animated-Flag-Mexico.gif',title:'Servidores Español Latino'}};
+  const langInfo = {'Sub Esp': {flag:'https://upload.wikimedia.org/wikipedia/commons/7/79/Animated-Flag-South-Korea.gif',title:'Servidores Subtitulado'}, 'Esp Lat': {flag:'https://upload.wikimedia.org/wikipedia/commons/5/5c/Animated-Flag-Mexico.gif',title:'Servidores EspaÃ±ol Latino'}};
   const order = ['Sub Esp','Esp Lat','Otros'];
   container.innerHTML = order.map(key => {
     if(!groups[key]||!groups[key].length) return '';
@@ -524,13 +525,13 @@ function loadServers(ep){
     return `<div class="srv-group">
       <div class="gh" onclick="toggleSrvGroup(this)">
         ${info.flag?`<img src="${info.flag}" alt="">`:''}${info.title}
-        <span class="arr">▼</span>
+        <span class="arr">â–¼</span>
       </div>
       <div class="g"><div class="g-inner">${groups[key].map(s => `
         <div class="srv">
           <span class="sn">${s.parsed.name}</span>
           <span class="q">${s.quality||'HD'}</span>
-          <button class="pb" onclick="playUrl('${s.url}')">▶</button>
+          <button class="pb" onclick="playUrl('${s.url}')">â–¶</button>
         </div>`).join('')}
       </div></div>
     </div>`;
@@ -546,15 +547,15 @@ function toggleSrvGroup(el){
 function expandSinfo(btn){
   const desc = document.getElementById('sinfoDesc');
   desc.classList.toggle('trunc');
-  btn.textContent = desc.classList.contains('trunc')?'Mostrar más':'Mostrar menos';
+  btn.textContent = desc.classList.contains('trunc')?'Mostrar mÃ¡s':'Mostrar menos';
 }
 
 function toggleSum(btn){
   const bd = btn.parentElement;
   bd.classList.toggle('open');
   const arr = bd.previousElementSibling?.querySelector('.arr');
-  if(arr) arr.textContent = bd.classList.contains('open')?'▼':'▶';
-  btn.textContent = bd.classList.contains('open')?'Mostrar menos':'Mostrar más';
+  if(arr) arr.textContent = bd.classList.contains('open')?'â–¼':'â–¶';
+  btn.textContent = bd.classList.contains('open')?'Mostrar menos':'Mostrar mÃ¡s';
 }
 
 function switchSeason(sn){
@@ -607,7 +608,7 @@ function playEpisode(episode, season){
   }
   // Update episode summary
   const sumBd = document.querySelector('.dp-sum .bd p');
-  if(sumBd) sumBd.textContent = ep.description || _curItem.description || 'Sin descripción disponible.';
+  if(sumBd) sumBd.textContent = ep.description || _curItem.description || 'Sin descripciÃ³n disponible.';
   // Update nav buttons
   const idx = _curEpisodes.findIndex(e=>e.season===_curSeason&&e.episode===_curEpIdx);
   const prev = _curEpisodes[idx-1];
@@ -620,12 +621,12 @@ function playEpisode(episode, season){
       <img src="${poster}" alt="">
       <div><div class="nav-label">Siguiente episodio</div>
       <div class="nav-title">Episodio ${next.episode}</div>
-      <div class="nav-meta">Episodio ${next.episode} · ${_curItem.origin||''}</div></div>
-      <span class="nav-arrow">→</span>
-    </div>`:`<div class="nav-card" style="opacity:.4;pointer-events:none"><img src="${poster}" alt=""><div><div class="nav-label">Siguiente episodio</div><div class="nav-title">—</div></div></div>`)+
+      <div class="nav-meta">Episodio ${next.episode} Â· ${_curItem.origin||''}</div></div>
+      <span class="nav-arrow">â†’</span>
+    </div>`:`<div class="nav-card" style="opacity:.4;pointer-events:none"><img src="${poster}" alt=""><div><div class="nav-label">Siguiente episodio</div><div class="nav-title">â€”</div></div></div>`)+
     `<div class="nav-links">
-      ${prev?`<a class="prev-link" onclick="navEpisode(-1)">← Episodio anterior</a>`:'<span class="prev-link disabled">← Episodio anterior</span>'}
-      <span class="list-link">📋 Lista de episodios</span>
+      ${prev?`<a class="prev-link" onclick="navEpisode(-1)">â† Episodio anterior</a>`:'<span class="prev-link disabled">â† Episodio anterior</span>'}
+      <span class="list-link">ðŸ“‹ Lista de episodios</span>
     </div>
     <div class="ep-sec">
       <div class="ep-tabs">${(()=>{
@@ -662,7 +663,7 @@ function playUrl(url){
     if(window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.KuroPlayer){
       window.Capacitor.Plugins.KuroPlayer.open({url, title:''});
     } else {
-      pf.src = url;
+      pf.src = PROXY ? PROXY + encodeURIComponent(url) : url;
     }
   }
 }
