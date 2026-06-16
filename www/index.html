@@ -24,6 +24,7 @@ header.scrolled{background:rgba(8,8,10,.98)}
 .nav a:hover,.nav a.active{color:#fff;background:rgba(124,58,237,.15)}
 .search-btn{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:10px;border-radius:50%;transition:background .3s}
 .search-btn:hover{background:rgba(255,255,255,.1)}
+.header-actions{display:flex;align-items:center;gap:20px}
 
 /* Drawer */
 .menu-btn{display:none;background:none;border:none;color:#fff;font-size:26px;cursor:pointer;padding:4px;line-height:1;margin-right:-4px}
@@ -223,28 +224,33 @@ header.scrolled{background:rgba(8,8,10,.98)}
 @keyframes loadBar{0%{width:0;margin-left:0}50%{width:100%;margin-left:0}100%{width:0;margin-left:100%}}
 
 @media(max-width:600px){
-  header{padding:14px calc(20px + env(safe-area-inset-right,0px)) 14px calc(20px + env(safe-area-inset-left,0px));gap:12px}
-  .hero{height:55vh;min-height:300px;padding:0 calc(16px + env(safe-area-inset-right,0px)) 40px calc(16px + env(safe-area-inset-left,0px))}
-  .hero-nav{bottom:40px;right:calc(16px + env(safe-area-inset-right,0px))}
+  header{padding:14px 20px;justify-content:space-between;gap:0}
+  .header-actions{gap:16px}
+  .hero{height:55vh;min-height:300px;padding:0 0 40px}
+  .hero-info{padding:0 20px}
+  .hero-info h1{font-size:28px;line-height:1.2}
+  .hero-info p{font-size:13px;color:#aaa;-webkit-line-clamp:3;margin-bottom:16px}
+  .hero-btns{padding:0 20px}
+  .hero-nav{bottom:40px;right:20px}
   .nav{display:none}
   .menu-btn{display:block}
-  .card-w{width:200px}
-  .card-t{width:140px}
-  .sh{padding:0 calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px))}
+  .card-t{width:130px}
+  .card-w{width:160px}
+  .sh .sc-arr{display:none}
+  .sh{padding:0 20px}
   .sh h2{font-size:15px}
-  .sh .sc-arr button{width:36px;height:36px;font-size:16px}
-  .row{padding:0 0 12px calc(16px + env(safe-area-inset-left,0px));gap:6px}
+  .row{padding:0 0 12px 20px;gap:8px}
   .row::after{width:30px}
-  .dp-hdr{padding:calc(60px + env(safe-area-inset-top,0px)) calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px))}
-  .dp-player{padding:0 calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px))}
-  .dp-actions{padding:8px calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px))}
-  .dp-sum{padding:0 calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px))}
-  .dp-sinfo{padding:0 calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px))}
-  .dp-servers{padding:0 calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px))}
-  .dp-warn{padding:12px calc(18px + env(safe-area-inset-right,0px));margin:0 calc(16px + env(safe-area-inset-right,0px)) 20px calc(16px + env(safe-area-inset-left,0px))}
-  .dp-nav2{padding:0 calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px))}
-  .search-overlay{padding:calc(70px + env(safe-area-inset-top,0px)) calc(16px + env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) calc(16px + env(safe-area-inset-left,0px))}
-  #catalog{padding:calc(80px + env(safe-area-inset-top,0px)) calc(16px + env(safe-area-inset-right,0px)) calc(30px + env(safe-area-inset-bottom,0px)) calc(16px + env(safe-area-inset-left,0px))}
+  .dp-hdr{padding:calc(60px + env(safe-area-inset-top,0px)) 16px 0 16px}
+  .dp-player{padding:0 16px}
+  .dp-actions{padding:8px 16px}
+  .dp-sum{padding:0 16px}
+  .dp-sinfo{padding:0 16px}
+  .dp-servers{padding:0 16px}
+  .dp-warn{padding:12px 16px;margin:0 16px 20px 16px}
+  .dp-nav2{padding:0 16px}
+  .search-overlay{padding:calc(70px + env(safe-area-inset-top,0px)) 16px 16px 16px}
+  #catalog{padding:calc(80px + env(safe-area-inset-top,0px)) 16px 30px 16px}
   #catalog .cat-grid{gap:10px}
 }
 
@@ -265,9 +271,11 @@ header.scrolled{background:rgba(8,8,10,.98)}
 
 <header id="header">
   <a class="logo" href="#" onclick="goHome();return false">Kuro<span>Doramas</span></a>
-  <button class="menu-btn" onclick="toggleDrawer()">☰</button>
+  <div class="header-actions">
+    <button class="search-btn" onclick="toggleSearch()">⌕</button>
+    <button class="menu-btn" onclick="toggleDrawer()">☰</button>
+  </div>
   <div class="nav" id="nav"></div>
-  <button class="search-btn" onclick="toggleSearch()">⌕</button>
 </header>
 
 <div id="drawerOverlay" onclick="closeDrawer()"></div>
